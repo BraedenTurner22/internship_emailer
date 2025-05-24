@@ -1,4 +1,3 @@
-
 # CS Internship Emailer Script
 
 A python script for fetching, parsing, and emailing computer science internships.
@@ -61,7 +60,7 @@ crontab -e
 Add this to crontab:
 ```bash
 */30 * * * * cd /full/path/to/your/project && /home/youruser/yourproject/.venv/bin/python
- run.py >> /full/path/to/your/project/cron.log 2>&1
+ main.py >> /full/path/to/your/project/cron.log 2>&1
 ```
 
 ## License
