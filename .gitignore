@@ -1,0 +1,14 @@
+#Local env
+.env
+
+#Venv setup
+pyvenv.cfg
+lib
+bin
+
+#fetched README
+most_recent_readme.txt
+
+#Python
+__pycache__
+.pytest_cache
