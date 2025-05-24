@@ -8,6 +8,7 @@ bin
 
 #fetched README
 most_recent_readme.txt
+internships.db
 
 #Python
 __pycache__

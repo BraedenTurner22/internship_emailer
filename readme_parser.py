@@ -7,7 +7,7 @@ import internship_db
 #These are words you can add to filter out roles you do not want
 SKIP_KEYWORDS = {'quant', 'trader'}
 
-#Method checking if internship at specific line contains specific keywords
+#Method checking if internship at specific line contains keywords in SKIP_KEYWORDS
 def should_skip_internship(role: str, keywords: set[str]) -> bool:
     role_lower = role.lower()
     return any(kw.lower() in role_lower for kw in keywords)
@@ -65,21 +65,27 @@ def parse_request_into_internship(line: str) -> Optional[Dict[str, str]]:
 
 def process_line(conn: sqlite3.Connection, line: str, skip_keywords: set[str] = SKIP_KEYWORDS) -> Optional[Dict[str, str]]:
 
-    internship = parse_request_into_internship(line)
+    #1) Checks to see if line on README begins with "|" or "|-", will not parse line
+    #otherwise as it is not a line containing an internship
+    ls = line.lstrip()
+    if not ls.startswith('|') or ls.startswith('|-'):
+        return None
 
+    #2) Parsing the line into an internship dict
+    internship = parse_request_into_internship(line)
     if not internship:
         return None
     
-    #Keyword filter
+    #3) Checking if line contains SKIP_KEYWORDS, will skip if it does
     if should_skip_internship(internship['Role'], skip_keywords):
         return None
 
-    #Duplication check
+    #4) Checks if line is already contained in database
     link = internship['Application Link']
     if internship_db.internship_exists(conn, link):
         # already sent
         return None
 
-    # new internship! insert & return so caller can email it
+    #5) Otherwise a new internship is found. Inserted into database and returned for emailing
     internship_db.insert_internship(conn, internship)
     return internship
