@@ -8,8 +8,13 @@ bin
 
 #fetched README
 most_recent_readme.txt
+
+#Database
 internships.db
 
 #Python
 __pycache__
 .pytest_cache
+
+#Cron job
+cron.log
