@@ -4,7 +4,7 @@ A python script for fetching, parsing, and emailing computer science internships
 
 While running, this script will send new internships to a designated email using the Python smtplib. Internships are stored in a sqlite3 database, so previously emailed internships are not emailed again.
 
-Using the public README from Simplify and Pitt CSC: https://raw.githubusercontent.com/SimplifyJobs/Summer2025-Internships/refs/heads/dev/README.md
+Using the public README from Simplify and Pitt CSC: https://raw.githubusercontent.com/SimplifyJobs/Summer2026-Internships/refs/heads/dev/README.md
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file.
