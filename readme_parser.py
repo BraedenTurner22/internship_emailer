@@ -46,19 +46,45 @@ def filter_active_sections(lines):
 
 
 
+import re
+from typing import Optional, Dict
+
 def parse_request_into_internship(line: str) -> Optional[Dict[str, str]]:
     parts = [p.strip() for p in line.strip().strip('|').split('|')]
-    # must have at least a link cell
+    # 1) company name & markdown link
     m = re.search(r'\[([^\]]+)\]\(([^)]+)\)', parts[0])
     if not m:
         return None
+    company = m.group(1)
+
+    # 2) role & location
+    role     = parts[1] if len(parts) > 1 else ""
+    location = parts[2] if len(parts) > 2 else ""
+
+    # 3) grab every href from the HTML cell
+    html_cell = parts[3] if len(parts) > 3 else ""
+    hrefs     = re.findall(r'href="([^"]+)"', html_cell)
+
+    # 4) pick the simplify.jobs link if present, else fall back to the first href
+    app_link = None
+    for href in hrefs:
+        if "simplify.jobs" in href:
+            app_link = href
+            break
+    if not app_link and hrefs:
+        app_link = hrefs[0]
+
+    # 5) if for some reason there wasn’t any <a href> at all, fall back to company-link
+    if not app_link:
+        app_link = m.group(2)
 
     return {
-        "Company":        m.group(1),
-        "Role":           parts[1] if len(parts) > 1 else "",
-        "Location":       parts[2] if len(parts) > 2 else "",
-        "Application Link": m.group(2)
+        "Company":         company,
+        "Role":            role,
+        "Location":        location,
+        "Application Link": app_link
     }
+
 
 
 
